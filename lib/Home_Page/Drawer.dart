@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:mini_e_commerce/Cart_Page/Cart.dart';
+import 'package:mini_e_commerce/Constant.dart';
+import 'package:mini_e_commerce/Favorite/Favorite.dart';
 import 'package:mini_e_commerce/Home_Page/HomePage.dart';
 import 'package:mini_e_commerce/Home_Page/TextIconButton.dart';
+import 'package:mini_e_commerce/Login/login_page.dart';
+import 'package:mini_e_commerce/Profile/Profile.dart';
+import 'package:mini_e_commerce/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
@@ -11,7 +18,9 @@ class MyDrawer extends StatelessWidget {
     return Drawer(
       child: Column(
         children: [
-          SizedBox(height: 50,),
+          SizedBox(
+            height: 50,
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(
               vertical: 20,
@@ -29,16 +38,46 @@ class MyDrawer extends StatelessWidget {
                   icon: Icons.home,
                   label: 'Home Screen',
                 ),
-                 TextIconButton(
-                  onPressed: () => Navigator.of(context).pushReplacement(MaterialPageRoute(
+                TextIconButton(
+                  onPressed: () => Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
                       builder: (_) => Cart(),
-                    ),),
+                    ),
+                  ),
                   icon: Icons.shopping_cart,
                   label: 'My Cart',
                 ),
-                const TextIconButton(
+                TextIconButton(
+                  onPressed: () => Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (_) => Favorite(),
+                    ),
+                  ),
                   icon: Icons.wallet_giftcard,
                   label: 'Favorite',
+                ),
+                TextIconButton(
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => Profile(),
+                    ),
+                  ),
+                  icon: Icons.person,
+                  label: 'Profile',
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                ToggleSwitch(
+                  initialLabelIndex:
+                      MyApp.of(context).getTheme() == ThemeMode.light ? 0 : 1,
+                  minWidth: 170,
+                  onToggle: (index) => MyApp.of(context).changeTheme(1),
+                  activeBgColors: [
+                    [lightColor1.withOpacity(0.8)],
+                    [lightColor1.withOpacity(0.8)]
+                  ],
+                  labels: ["Light Mode", "Dark Mode"],
                 ),
                 const Divider(
                   height: 50,
@@ -46,8 +85,15 @@ class MyDrawer extends StatelessWidget {
                   thickness: 1,
                 ),
                 TextIconButton(
-                  onPressed: () {
-                    Scaffold.of(context).closeDrawer();
+                  onPressed: () async {
+                    final prefs = await SharedPreferences.getInstance();
+                    prefs.clear();
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                        builder: (_) => LoginPage(),
+                      ),
+                      (route) => false,
+                    );
                   },
                   icon: Icons.logout,
                   label: 'Log Out',

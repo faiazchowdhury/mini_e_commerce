@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mini_e_commerce/Constant.dart';
 import 'package:mini_e_commerce/Home_Page/Drawer.dart';
 import 'package:mini_e_commerce/Home_Page/HomePageProvider.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class Favorite extends StatefulWidget {
+  const Favorite({super.key});
 
   @override
-  State<StatefulWidget> createState() => _HomePageState();
+  State<StatefulWidget> createState() => _FavoritePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  final homeProvider = Homepageprovider();
+class _FavoritePageState extends State<Favorite> {
+  final favoriteProvider = Homepageprovider();
   late final SharedPreferences prefs;
 
   @override
@@ -27,13 +27,13 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: lightColor1.withOpacity(0.5),
-          title: const Text('Home Screen'),
+          title: const Text('Favorite'),
         ),
         drawer: const MyDrawer(),
         body: SafeArea(
           child: FutureBuilder(
-              future: homeProvider.getProduct(),
-              builder: (context, res) => homeProvider.isLoading
+              future: favoriteProvider.getProduct(),
+              builder: (context, res) => favoriteProvider.isLoading
                   ? Center(child: CircularProgressIndicator())
                   : SingleChildScrollView(
                       child: Column(
@@ -41,6 +41,7 @@ class _HomePageState extends State<HomePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           for (int i = 0; i < res.data!.length; i++)
+                          if(prefs.getBool("${res.data![i].id}")!=null)
                             Container(
                               margin: EdgeInsets.all(5),
                               padding: EdgeInsets.all(10),
@@ -95,6 +96,8 @@ class _HomePageState extends State<HomePage> {
                                                 flex: 1,
                                                 child: GestureDetector(
                                                     onTap: () {
+                                                      print(prefs.getBool(
+                                                          "${res.data![i].id}"));
                                                       if (prefs.getBool(
                                                               "${res.data![i].id}") ==
                                                           null) {
@@ -127,35 +130,7 @@ class _HomePageState extends State<HomePage> {
                                             style: TextStyle(
                                               fontSize: 10,
                                             ),
-                                          ),
-                                          TextButton(
-                                              style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateProperty.all(
-                                                        lightColor1
-                                                            .withOpacity(0.2)),
-                                              ),
-                                              onPressed: () {
-                                                if (prefs.getInt(
-                                                        "cart ${res.data![i].id}") !=
-                                                    null) {
-                                                  prefs.setInt(
-                                                      "cart ${res.data![i].id}",
-                                                      prefs.getInt(
-                                                              "cart ${res.data![i].id}")! +
-                                                          1);
-                                                } else {
-                                                  prefs.setInt(
-                                                      "cart ${res.data![i].id}",
-                                                      1);
-                                                }
-                                                Fluttertoast.showToast(msg: "Item Added to Cart");
-                                              },
-                                              child: Container(
-                                                  width: 500,
-                                                  child: Center(
-                                                      child:
-                                                          Text("Add to Cart"))))
+                                          )
                                         ],
                                       )),
                                 ],

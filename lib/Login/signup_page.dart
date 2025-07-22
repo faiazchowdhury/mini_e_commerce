@@ -1,8 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mini_e_commerce/Constant.dart';
 import 'package:mini_e_commerce/Home_Page/HomePage.dart';
 import 'package:mini_e_commerce/Login/RegistrationProvider.dart';
+import 'package:mini_e_commerce/Login/login_page.dart';
+import 'package:mini_e_commerce/main.dart';
 import 'package:provider/provider.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -21,7 +24,6 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     final regProvider = Provider.of<Registrationprovider>(context);
     return Scaffold(
-      backgroundColor: const Color(0Xfffafafa),
       body: Center(
         child: SafeArea(
           child: Column(
@@ -46,8 +48,8 @@ class _SignUpPageState extends State<SignUpPage> {
               Container(
                 margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                 padding: const EdgeInsets.all(5),
-                decoration: const BoxDecoration(
-                  color: Color(0xfff0e4f2),
+                decoration: BoxDecoration(
+                  border: Border.all(color: lightColor1),
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
                 child: Row(
@@ -71,8 +73,8 @@ class _SignUpPageState extends State<SignUpPage> {
               Container(
                 margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                 padding: const EdgeInsets.all(5),
-                decoration: const BoxDecoration(
-                  color: Color(0xfff0e4f2),
+                decoration: BoxDecoration(
+                  border: Border.all(color: lightColor1),
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
                 child: Row(
@@ -96,8 +98,8 @@ class _SignUpPageState extends State<SignUpPage> {
               Container(
                 margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                 padding: const EdgeInsets.all(5),
-                decoration: const BoxDecoration(
-                  color: Color(0xfff0e4f2),
+                decoration: BoxDecoration(
+                  border: Border.all(color: lightColor1),
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
                 child: Row(
@@ -121,8 +123,8 @@ class _SignUpPageState extends State<SignUpPage> {
               Container(
                 margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                 padding: const EdgeInsets.all(5),
-                decoration: const BoxDecoration(
-                  color: Color(0xfff0e4f2),
+                decoration: BoxDecoration(
+                  border: Border.all(color: lightColor1),
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
                 child: Row(
@@ -152,24 +154,19 @@ class _SignUpPageState extends State<SignUpPage> {
                       userNameController.text == "" ||
                       passController.text == "" ||
                       confirmPassController.text == "") {
-                        Fluttertoast.showToast(
-                              msg: "Need to fill up all fields!");
-                      }
-                      else if(passController.text== confirmPassController){
-                        Fluttertoast.showToast(
-                              msg: "Passwords don't match!");
-                      }else{
-                        regProvider.setEmail(emailController.text);
-                        regProvider.setPass(passController.text);
-                        regProvider.setUserName(userNameController.text);
-                        await regProvider.regPressed();
-                        if(regProvider.statusCode==200){
-                          Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => HomePage()));
-                        }
-                      }
+                    Fluttertoast.showToast(msg: "Need to fill up all fields!");
+                  } else if (passController.text == confirmPassController) {
+                    Fluttertoast.showToast(msg: "Passwords don't match!");
+                  } else {
+                    regProvider.setEmail(emailController.text);
+                    regProvider.setPass(passController.text);
+                    regProvider.setUserName(userNameController.text);
+                    await regProvider.regPressed();
+                    if (regProvider.statusCode == 200) {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => LoginPage()));
+                    }
+                  }
                 },
                 child: Container(
                   width: 1000,
@@ -195,10 +192,13 @@ class _SignUpPageState extends State<SignUpPage> {
               RichText(
                   text: TextSpan(
                 children: [
-                  const TextSpan(
+                  TextSpan(
                       text: "Already have an account?  ",
                       style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.bold)),
+                          color: MyApp.of(context).getTheme() == ThemeMode.dark
+                              ? Colors.white
+                              : Colors.black,
+                          fontWeight: FontWeight.bold)),
                   TextSpan(
                       text: "Login",
                       recognizer: TapGestureRecognizer()

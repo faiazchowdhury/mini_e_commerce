@@ -1,10 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mini_e_commerce/Constant.dart';
 import 'package:mini_e_commerce/Home_Page/HomePage.dart';
 import 'package:mini_e_commerce/Login/LoginProvide.dart';
 import 'package:mini_e_commerce/Login/RegistrationProvider.dart';
 import 'package:mini_e_commerce/Login/signup_page.dart';
+import 'package:mini_e_commerce/main.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
@@ -22,7 +24,6 @@ class _LoginPageState extends State<LoginPage> {
     final loginProvider = Provider.of<LoginProvider>(context);
 
     return Scaffold(
-      backgroundColor: const Color(0Xfffafafa),
       body: Center(
         child: SafeArea(
           child: Column(
@@ -47,8 +48,8 @@ class _LoginPageState extends State<LoginPage> {
               Container(
                 margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                 padding: const EdgeInsets.all(5),
-                decoration: const BoxDecoration(
-                  color: Color(0xfff0e4f2),
+                decoration:  BoxDecoration(
+                  border: Border.all(color:lightColor1),
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
                 child: Row(
@@ -72,8 +73,7 @@ class _LoginPageState extends State<LoginPage> {
               Container(
                 margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                 padding: const EdgeInsets.all(5),
-                decoration: const BoxDecoration(
-                  color: Color(0xfff0e4f2),
+                decoration:  BoxDecoration(border: Border.all(color:lightColor1),
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
                 child: Row(
@@ -146,10 +146,11 @@ class _LoginPageState extends State<LoginPage> {
               RichText(
                   text: TextSpan(
                 children: [
-                  const TextSpan(
+                   TextSpan(
                       text: "Don't have an account?  ",
-                      style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.bold)),
+                      style: TextStyle(  
+                        color: MyApp.of(context).getTheme()==ThemeMode.dark?Colors.white:Colors.black,
+                        fontWeight: FontWeight.bold)),
                   TextSpan(
                       text: "Sign up",
                       recognizer: TapGestureRecognizer()

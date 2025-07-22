@@ -48,6 +48,7 @@ class LoginProvider with ChangeNotifier {
     _res = response.body;
     if (_statusCode == 200) {
       prefs.setString('token', jsonDecode(response.body)['token']);
+      prefs.setString("email", _email);
     } else {
       Fluttertoast.showToast(msg: response.body);
     }
